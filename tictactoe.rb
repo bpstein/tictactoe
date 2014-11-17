@@ -21,9 +21,16 @@ def empty_positions(b)
 	b.select {|k, v| v == ' '}.keys
 end
 
+def occupied_positions(b)
+	b.select{|k, v| v == 'X'}.keys
+	b.select{|k, v| v == 'O'}.keys
+end
+
 def player_picks_square(b)
-	puts "Please pick a square (1-9)."
-	position = gets.chomp.to_i
+	begin
+		puts "Please pick a square (1-9)."
+		position = gets.chomp.to_i
+	end until empty_positions(b).include?(position)
 	b[position] = 'X'
 end
 
@@ -45,17 +52,16 @@ def check_winner(b)
 	end
 end
 
-
-board = initialize_board
-draw_board(board)
+b = initialize_board
+draw_board(b)
 
 # Loop until a winner is found, or until all squares are taken (tie)	
 begin 
-	player_picks_square(board)
-	computer_picks_square(board)
-	draw_board(board)
-	winner = check_winner(board)
-end until winner || empty_positions(board).empty?
+	player_picks_square(b)
+	computer_picks_square(b)
+	draw_board(b)
+	winner = check_winner(b)
+end until winner || empty_positions(b).empty?
 
 if winner
 	puts "#{winner} won!"
